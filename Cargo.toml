@@ -7,5 +7,14 @@ license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "aalto2lib"
+src = "src/tile.rs"
+
+[[bin]]
+name = "aalto2"
+src = "src/main.rs"
+
 [dependencies]
 rand = "0.8.4"
