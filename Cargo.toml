@@ -2,7 +2,7 @@
 name = "aalto2"
 version = "0.1.0"
 edition = "2021"
-maintainers = ["Elias Arno Eskelinen <elias.eskelinen@pm.me>"]
+authors = ["Elias Arno Eskelinen <elias.eskelinen@pm.me>"]
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,11 +10,9 @@ license = "MIT"
 [lib]
 crate-type = ["cdylib", "rlib"]
 name = "aalto2lib"
-src = "src/tile.rs"
 
 [[bin]]
 name = "aalto2"
-src = "src/main.rs"
 
 [dependencies]
 rand = "0.8.4"
