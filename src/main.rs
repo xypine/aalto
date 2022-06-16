@@ -7,7 +7,7 @@ use aalto2lib::{
 };
 
 fn main() {
-    let h = 48;
+    let h = 24;
     let w = ((h as f64)*1.75) as usize;
     let mut grid = reset_grid(w, h, rules::terrain());
 

@@ -3,6 +3,8 @@ use rand::seq::SliceRandom;
 pub mod value;
 pub mod tile;
 pub mod rules;
+#[cfg(feature = "wasm")]
+pub mod wasm;
 
 use tile::Tile;
 
