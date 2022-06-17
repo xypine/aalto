@@ -1,4 +1,4 @@
-use aalto2lib::{
+use aalto2::{
     reset_grid,
     choose_collapsable,
     collapse,
@@ -18,5 +18,6 @@ fn main() {
         tile = choose_collapsable(&grid);
     }
     
-    println!("{}", render(&grid));
+    // println!("{}", render(&grid));
+    println!("{}", serde_json::to_string_pretty(&rules::checkers()).unwrap());
 }
