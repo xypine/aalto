@@ -6,5 +6,6 @@ use serde::{Serialize, Deserialize};
 pub struct Value {
     pub value: String,
     pub color: String,
-    pub connectors: [Vec<String>; 4]
+    pub connectors: [Vec<String>; 4],
+    pub disallow: Option<[Vec<String>; 4]>
 }

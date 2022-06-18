@@ -61,11 +61,28 @@ pub fn propagate(grid: &mut Grid, x: usize, y: usize, max_iterations: usize) {
             let mut new_possible = vec![];
             for possible in &tile.possible {
                 let connector = &possible.connectors[neighbour_direction];
+                let disallowed: Option<Vec<String>>;
+                if possible.disallow.is_some() {
+                    let tmp = possible.disallow.clone().unwrap()[neighbour_direction].clone();
+                    disallowed = Some(tmp);
+                }
+                else {
+                    disallowed = None;
+                }
                 for neighbour_possible in &neighbour.possible {
                     let matching_connector = &neighbour_possible.connectors[neighbour_reverse_direction];
-                    if connector.iter().find(|c| matching_connector.contains(*c)).is_some() {
-                        if !new_possible.contains(neighbour_possible) {
-                            new_possible.push( neighbour_possible.clone() );
+                    if connector.iter().find(|c| matching_connector.contains(*c)).is_some() { // Check that atleast any connectors match
+                        let allowed: bool;
+                        if disallowed.is_some() {
+                            allowed = disallowed.clone().unwrap().iter().find(|c| matching_connector.contains(*c)).is_none();
+                        }
+                        else {
+                            allowed = true;
+                        }
+                        if allowed {
+                            if !new_possible.contains(neighbour_possible) {
+                                new_possible.push( neighbour_possible.clone() );
+                            }
                         }
                     }
                 }
