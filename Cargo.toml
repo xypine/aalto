@@ -1,9 +1,12 @@
 [package]
 name = "aalto"
-version = "0.2.0"
+version = "0.1.0"
 edition = "2021"
 authors = ["Elias Arno Eskelinen <elias.eskelinen@pm.me>"]
 license = "MIT"
+repository = "https://github.com/xypine/aalto"
+documentation = "https://docs.rs/aalto"
+description = "a simple implementation of a wave collapse algorithm"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -26,3 +29,7 @@ serde_json = {version = "1.0", optional = true}
 default = [ "wasm" ]
 wasm = [ "wasm-bindgen", "serde_derive" ]
 serde_derive = [ "serde", "serde_json" ]
+
+[profile.release]
+strip = true  # Automatically strip symbols from the binary.
+lto = true
