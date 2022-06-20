@@ -1,4 +1,4 @@
-use aalto2::{
+use aalto::{
     reset_grid,
     choose_collapsable,
     collapse,

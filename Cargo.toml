@@ -1,6 +1,6 @@
 [package]
-name = "aalto2"
-version = "0.1.0"
+name = "aalto"
+version = "0.2.0"
 edition = "2021"
 authors = ["Elias Arno Eskelinen <elias.eskelinen@pm.me>"]
 license = "MIT"
@@ -9,10 +9,10 @@ license = "MIT"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "aalto2"
+name = "aalto"
 
 [[bin]]
-name = "aalto2bin"
+name = "aaltobin"
 path = "src/main.rs"
 
 [dependencies]
