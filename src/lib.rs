@@ -8,7 +8,7 @@ pub mod wasm;
 
 use tile::Tile;
 
-type Grid = Vec<Vec<Tile>>;
+pub type Grid = Vec<Vec<Tile>>;
 
 pub fn reset_grid(width: usize, height: usize, default_possible: Vec<value::Value>) -> Grid {
     let mut grid: Grid = vec![];
