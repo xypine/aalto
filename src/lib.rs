@@ -134,6 +134,15 @@ pub fn choose_collapsable(grid: &Grid) -> Option<(usize, usize)> {
     None
 }
 
+pub fn collapse_all(grid: &mut Grid, max_iterations: usize) {
+    let mut tile = crate::choose_collapsable(&grid);
+    while tile.is_some() {
+        let t = tile.unwrap();
+        crate::collapse(grid, t.0, t.1, max_iterations);
+        tile = crate::choose_collapsable(&grid);
+    }
+}
+
 pub fn render(grid: &Grid) -> String {
     let mut out = String::from("");
     for col in grid {
