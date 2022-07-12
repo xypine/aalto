@@ -21,9 +21,9 @@ fn count_collapsable_amount(grid: &aalto::Grid) -> usize {
 
 fn main() {
     let verbose: bool = false;
-    let h = 32;
-    let w = 32;
-    let mut grid = reset_grid(w, h, rules::terrain());
+    let h = 16;
+    let w = 64;
+    let mut grid = reset_grid(w, h, rules::dungeon());
 
     let mut tile = choose_collapsable(&grid, None);
     while tile.is_some() {

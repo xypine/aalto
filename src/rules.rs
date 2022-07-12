@@ -89,7 +89,7 @@ pub fn terrain() -> Vec<Value> {
 pub fn dungeon() -> Vec<Value> {
     vec![
         Value {
-          value: "▓".to_string(), // Wall in
+          value: "█".to_string(), // Wall in
           color: "url('/aaltoweb/kenney/Tiles/tile_0000.png')".to_string(),
           disallow: None,
           connectors: [
@@ -128,7 +128,7 @@ pub fn dungeon() -> Vec<Value> {
           ]
         },
         Value {
-          value: "▒".to_string(), // Wall in variant
+          value: "▓".to_string(), // Wall in variant
           color: "url('/aaltoweb/kenney/Tiles/tile_0012.png')".to_string(),
           disallow: None,
           connectors: [

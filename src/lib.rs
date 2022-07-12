@@ -90,7 +90,8 @@ pub fn propagate(grid: &mut Grid, x: usize, y: usize, max_recursions: usize) {
             }
 
             // Only propagate if possible states have changed, don't use != as it takes order into account
-            if !old_possible.iter().all( |p| new_possible.contains(p) ) {
+            // Also don't propagate if this tile has no possible values
+            if !old_possible.iter().all( |p| new_possible.contains(p) ) && new_possible.len() > 0 {
                 neighbour.possible = new_possible;
                 propagate(grid, neighbour_xy.0, neighbour_xy.1, max_recursions-1);
             }
@@ -154,6 +155,18 @@ pub fn collapse_all(grid: &mut Grid, rng_seed: Option<u64>, max_recursions: usiz
         collapse(grid, t.0, t.1, rng_seed, max_recursions);
         tile = choose_collapsable(&grid, rng_seed);
     }
+}
+
+pub fn is_healthy(grid: &Grid) -> bool {
+    for col in grid {
+        for t in col {
+            if t.possible.len() < 1 {
+                return false;
+            }
+        }
+    }
+
+    true
 }
 
 pub fn render(grid: &Grid) -> String {
