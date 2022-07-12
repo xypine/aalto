@@ -25,7 +25,7 @@ pub fn reset_grid(width: usize, height: usize, default_possible: &str) -> String
 
 #[cfg_attr(feature = "serde_derive", derive(Serialize, Deserialize))]
 pub struct WasmGrid {
-    tiles: crate::Grid
+    pub tiles: crate::Grid
 }
 
 #[wasm_bindgen]
