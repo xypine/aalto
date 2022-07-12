@@ -39,33 +39,33 @@ pub fn propagate(grid: &str, x: usize, y: usize, max_iterations: usize) -> Strin
 }
 
 #[wasm_bindgen]
-pub fn collapse(grid: &str, x: usize, y: usize, max_iterations: usize) -> String {
+pub fn collapse(grid: &str, x: usize, y: usize, rng_seed: Option<u64>, max_iterations: usize) -> String {
     let grid_parsed: WasmGrid = serde_json::from_str(grid).unwrap();
     let mut mgrid = grid_parsed.tiles.clone();
-    crate::collapse(&mut mgrid, x, y, max_iterations);
+    crate::collapse(&mut mgrid, x, y, rng_seed, max_iterations);
     return serde_json::to_string(&WasmGrid{
         tiles: mgrid
     }).unwrap();
 }
 
 #[wasm_bindgen]
-pub fn choose_collapsable(grid: &str) -> String {
+pub fn choose_collapsable(grid: &str, rng_seed: Option<u64>) -> String {
     let grid_parsed: WasmGrid = serde_json::from_str(grid).unwrap();
     let mgrid = grid_parsed.tiles.clone();
-    let result = crate::choose_collapsable(&mgrid);
+    let result = crate::choose_collapsable(&mgrid, rng_seed);
     return serde_json::to_string(&result).unwrap();
 }
 
 #[wasm_bindgen]
-pub fn collapse_all(grid: &str, max_iterations: usize) -> String {
+pub fn collapse_all(grid: &str, rng_seed: Option<u64>, max_iterations: usize) -> String {
     let grid_parsed: WasmGrid = serde_json::from_str(grid).unwrap();
     let mut mgrid = grid_parsed.tiles.clone();
     
-    let mut tile = crate::choose_collapsable(&mgrid);
+    let mut tile = crate::choose_collapsable(&mgrid, rng_seed);
     while tile.is_some() {
         let t = tile.unwrap();
-        crate::collapse(&mut mgrid, t.0, t.1, max_iterations);
-        tile = crate::choose_collapsable(&mgrid);
+        crate::collapse(&mut mgrid, t.0, t.1, rng_seed, max_iterations);
+        tile = crate::choose_collapsable(&mgrid, rng_seed);
     }
 
     return serde_json::to_string(&WasmGrid{

@@ -4,10 +4,11 @@ version = 3
 
 [[package]]
 name = "aalto"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "getrandom",
  "rand",
+ "rand_chacha",
  "serde",
  "serde_json",
  "wasm-bindgen",

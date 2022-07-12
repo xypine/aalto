@@ -1,4 +1,5 @@
-use rand::seq::SliceRandom;
+use rand_chacha::ChaCha8Rng;
+use rand::{seq::SliceRandom, SeedableRng};
 
 pub mod value;
 pub mod tile;
@@ -25,8 +26,8 @@ pub fn reset_grid(width: usize, height: usize, default_possible: Vec<value::Valu
     grid
 }
 
-pub fn propagate(grid: &mut Grid, x: usize, y: usize, max_iterations: usize) {
-    if max_iterations < 1 {
+pub fn propagate(grid: &mut Grid, x: usize, y: usize, max_recursions: usize) {
+    if max_recursions < 1 {
         return;
     }
     let tile = grid[y][x].clone();
@@ -88,25 +89,32 @@ pub fn propagate(grid: &mut Grid, x: usize, y: usize, max_iterations: usize) {
                 }
             }
 
-            if old_possible != new_possible {
+            // Only propagate if possible states have changed, don't use != as it takes order into account
+            if !old_possible.iter().all( |p| new_possible.contains(p) ) {
                 neighbour.possible = new_possible;
-                propagate(grid, neighbour_xy.0, neighbour_xy.1, max_iterations-1);
+                propagate(grid, neighbour_xy.0, neighbour_xy.1, max_recursions-1);
             }
         }
     }
 }
 
-pub fn collapse(grid: &mut Grid, x: usize, y: usize, max_iterations: usize) {
+/// If rng_seed is none, rng thread is used instead
+pub fn collapse(grid: &mut Grid, x: usize, y: usize, rng_seed: Option<u64>, max_recursions: usize) {
+
     let mut current_tile = &mut grid[y][x];
     if current_tile.possible.len() > 1 {
         current_tile.possible = vec![
-            current_tile.possible.choose(&mut rand::thread_rng()).unwrap().clone()
+            match rng_seed {
+                Some( seed ) => current_tile.possible.choose(&mut ChaCha8Rng::seed_from_u64(seed)).unwrap().clone(),
+                None => current_tile.possible.choose(&mut rand::thread_rng()).unwrap().clone(),
+            }
         ];
-        propagate(grid, x, y, max_iterations);
+        propagate(grid, x, y, max_recursions);
     }
 }
 
-pub fn choose_collapsable(grid: &Grid) -> Option<(usize, usize)> {
+/// If rng_seed is none, rng thread is used instead
+pub fn choose_collapsable(grid: &Grid, rng_seed: Option<u64>) -> Option<(usize, usize)> {
     let mut matching_tiles: Vec<(usize, usize)> = vec![];
     let mut min_entropy = usize::MAX;
 
@@ -128,18 +136,23 @@ pub fn choose_collapsable(grid: &Grid) -> Option<(usize, usize)> {
     }
 
     if matching_tiles.len() > 0 {
-        return Some(*matching_tiles.choose(&mut rand::thread_rng()).unwrap());
+        let chosen = match rng_seed {
+            Some( seed ) => matching_tiles.choose(&mut ChaCha8Rng::seed_from_u64(seed)).unwrap().clone(),
+            None => matching_tiles.choose(&mut rand::thread_rng()).unwrap().clone(),
+        };
+        return Some(chosen);
     }
 
     None
 }
 
-pub fn collapse_all(grid: &mut Grid, max_iterations: usize) {
-    let mut tile = crate::choose_collapsable(&grid);
+/// If rng_seed is none, rng thread is used instead
+pub fn collapse_all(grid: &mut Grid, rng_seed: Option<u64>, max_recursions: usize) {
+    let mut tile = choose_collapsable(&grid, rng_seed);
     while tile.is_some() {
         let t = tile.unwrap();
-        crate::collapse(grid, t.0, t.1, max_iterations);
-        tile = crate::choose_collapsable(&grid);
+        collapse(grid, t.0, t.1, rng_seed, max_recursions);
+        tile = choose_collapsable(&grid, rng_seed);
     }
 }
 
