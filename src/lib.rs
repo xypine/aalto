@@ -4,7 +4,7 @@ use rand::{seq::SliceRandom, SeedableRng};
 pub mod value;
 pub mod tile;
 pub mod rules;
-pub mod utils;
+pub mod features;
 #[cfg(feature = "wasm")]
 pub mod wasm;
 

@@ -20,6 +20,10 @@ fn count_collapsable_amount(grid: &aalto::Grid) -> usize {
 }
 
 fn main() {
+    extraction_demo();
+}
+
+fn _solve_demo() {
     let verbose: bool = false;
     let h = 16;
     let w = 64;
@@ -37,4 +41,9 @@ fn main() {
     
     println!("{}", render(&grid));
     //println!("{}", serde_json::to_string_pretty(&rules::checkers()).unwrap());
+}
+
+fn extraction_demo() {
+    let image = aalto::features::extractor::load_local_image("tests/images/3Bricks.png".to_string()).unwrap();
+    aalto::features::extractor::extract_from_image(image, 3);
 }

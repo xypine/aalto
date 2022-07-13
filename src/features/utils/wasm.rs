@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use crate::{utils, wasm::WasmGrid};
+use crate::{features::utils, wasm::WasmGrid};
 
 #[wasm_bindgen]
 pub fn fill_tiles_from_existing_chunk(
