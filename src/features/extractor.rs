@@ -52,6 +52,7 @@ pub fn extract_from_image(image: DynamicImage, n: usize) -> Vec<crate::value::Va
     let mut existing_connectors: HashMap<(String, String, usize), String> = HashMap::new();
     let mut latest_connector = 0;
 
+    let mut index = 0;
     for (b64, known_positions) in tile_positions {
         let mut connectors = [
             vec![],
@@ -122,12 +123,13 @@ pub fn extract_from_image(image: DynamicImage, n: usize) -> Vec<crate::value::Va
         }
 
         let rule = Value {
-            value: "lmao".to_string(),
+            value: index.to_string(),
             color: b64.clone(),
             disallow: None,
             connectors
         };
         rules.push(rule);
+        index += 1;
     }
 
     println!("{}", serde_json::to_string(&rules).unwrap());
