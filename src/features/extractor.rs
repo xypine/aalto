@@ -1,8 +1,11 @@
 use std::collections::HashMap;
 
-use image::{DynamicImage, GenericImageView, SubImage};
+use image::{DynamicImage, GenericImageView};
 
 use crate::{value::Value};
+
+#[cfg(feature = "wasm")]
+pub mod wasm;
 
 pub fn load_local_image(img_path: String) -> Result<DynamicImage, image::ImageError> {
     // Load the image
@@ -26,7 +29,7 @@ fn invert_hashmap<K, V>(hashmap: &HashMap<K, V>) -> HashMap<&V, Vec<&K>> where V
     new_hashmap
 }
 
-pub fn extract_from_image(image: DynamicImage, n: usize) {
+pub fn extract_from_image(image: DynamicImage, n: usize) -> Vec<crate::value::Value> {
     let w = image.width();
     let h = image.height();
     println!("{:?}", (w, h));
@@ -128,6 +131,7 @@ pub fn extract_from_image(image: DynamicImage, n: usize) {
     }
 
     println!("{}", serde_json::to_string(&rules).unwrap());
+    rules
 }
 
 pub fn image_to_base64(image: DynamicImage) -> String {
@@ -143,16 +147,16 @@ pub fn image_to_base64(image: DynamicImage) -> String {
 mod tests {
     #[test]
     fn image_loading_works() {
-        super::load_local_image("tests/images/Flowers.png".to_string()).unwrap();
+        let _ = super::load_local_image("tests/images/Flowers.png".to_string()).unwrap();
     }
     #[test]
     fn extraction_works_flowers() {
         let image = super::load_local_image("tests/images/Flowers.png".to_string()).unwrap();
-        super::extract_from_image(image, 3);
+        let _ = super::extract_from_image(image, 3);
     }
     #[test]
     fn extraction_works_cat() {
         let image = super::load_local_image("tests/images/Cat.png".to_string()).unwrap();
-        super::extract_from_image(image, 3);
+        let _ = super::extract_from_image(image, 3);
     }
 }
